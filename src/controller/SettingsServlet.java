@@ -35,20 +35,15 @@ public class SettingsServlet extends HttpServlet {
 		User loginUser = (User) session.getAttribute("loginUser");
 
 		List<Branch> branches = new BranchService().getBranches();
-		request.setAttribute("branches", branches);
+		session.setAttribute("branches", branches);
 
 		List<Position> positions = new PositionService().getPositions();
-		request.setAttribute("positions", positions);
-//
-//		User editUser = new UserService().getUser("id");
-//
-//		request.setAttribute("editUser", editUser);
-		if (session.getAttribute("editUser") == null) {
-			User editUser = new UserService().getUser(loginUser.getId());
-			session.setAttribute("editUser", editUser);
-		}
+		session.setAttribute("positions", positions);
 
 
+		int hoge = Integer.parseInt(request.getParameter("id"));
+		User editUser  = new UserService().getUser(hoge);
+		session.setAttribute("editUser", editUser);
 		request.getRequestDispatcher("settings.jsp").forward(request, response);
 	}
 
@@ -63,6 +58,7 @@ public class SettingsServlet extends HttpServlet {
 		User editUser = getEditUser(request);
 		session.setAttribute("editUser", editUser);
 
+
 		if (isValid(request, messages) == true) {
 
 			try {
@@ -71,16 +67,21 @@ public class SettingsServlet extends HttpServlet {
 				session.removeAttribute("editUser");
 				messages.add("他の人によって更新されています。最新のデータを表示しました。データを確認してください。");
 				session.setAttribute("errorMessages", messages);
-				response.sendRedirect("settings");
+//				response.sendRedirect("settings.jsp");
+
 			}
 
-			session.setAttribute("loginUser", editUser);
+//			session.setAttribute("loginUser", editUser);
 			session.removeAttribute("editUser");
 
-			response.sendRedirect("./");
+			response.sendRedirect("users");
+
 		} else {
+
 			session.setAttribute("errorMessages", messages);
-			response.sendRedirect("settings");
+//			session.setAttribute("loginUser", editUser);
+			response.sendRedirect("settings.jsp");
+//			request.getRequestDispatcher("settings.jsp").forward(request, response);
 		}
 	}
 
@@ -90,10 +91,16 @@ public class SettingsServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		User editUser = (User) session.getAttribute("editUser");
 
+		String password = request.getParameter("password");
+
 		editUser.setName(request.getParameter("name"));
-		editUser.setLoginId(request.getParameter("loginId"));
-		editUser.setPassword(request.getParameter("password"));
-		editUser.setBranchId(editUser.getBranchId());
+		editUser.setLoginId(request.getParameter("account"));
+		editUser.setBranchId(Integer.parseInt(request.getParameter("branchId")));
+		editUser.setPostId(Integer.parseInt(request.getParameter("positionId")));
+
+		if(!(StringUtils.isEmpty(password) == true)){
+			editUser.setPassword(request.getParameter("password"));
+		}
 
 		return editUser;
 	}
@@ -106,12 +113,17 @@ public class SettingsServlet extends HttpServlet {
 		String passwordConfirm = request.getParameter("password_confirm");
 
 		if (StringUtils.isEmpty(account) == true) {
-			messages.add("アカウント名を入力してください");
+			messages.add("ログインIDを入力してください");
 		}
-		if (StringUtils.isEmpty(password) == true) {
-			messages.add("パスワードを入力してください");
-		}
-		if (password != passwordConfirm) {
+//		if (StringUtils.isEmpty(password) == true) {
+//			messages.add("パスワードを入力してください");
+//		}
+//		if (StringUtils.isEmpty(password) == true) {
+//			editUser.setPassword(editUser.getPassword());
+//		} else {
+//			editUser.setPassword(request.getParameter("password"));
+//		}
+		if (!(password.equals(passwordConfirm))) {
 			messages.add("パスワードを確認してください");
 		}
 		// TODO アカウントが既に利用されていないか、メールアドレスが既に登録されていないかなどの確認も必要

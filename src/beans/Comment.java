@@ -6,6 +6,7 @@ public class Comment implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String text;
+	private String name;
 	private int id;
 	private int user_id;
 	private int message_id;
@@ -13,6 +14,14 @@ public class Comment implements Serializable {
 	private Date update_dt;
 
 //ゲッターとセッターは残す。
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public String getComment() {
 		return text;
 	}

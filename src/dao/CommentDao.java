@@ -18,8 +18,8 @@ public class CommentDao {
 		PreparedStatement ps = null;
 		try {
 			StringBuilder sql = new StringBuilder();
-			sql.append("SELECT * FROM comments ");
-			sql.append("ORDER BY insert_dt DESC limit " + num);
+			sql.append("SELECT * FROM user_comment ");
+			sql.append("ORDER BY insert_at DESC limit " + num);
 
 			ps = connection.prepareStatement(sql.toString());
 
@@ -39,18 +39,16 @@ public class CommentDao {
 		List<Comment> ret = new ArrayList<Comment>();
 		try {
 			while (rs.next()) {
-				int id = rs.getInt("id");
-				int userId = rs.getInt("user_id");
-				int messageId = rs.getInt("message_id");
 				String text = rs.getString("text");
-				Timestamp insertDate = rs.getTimestamp("insert_dt");
+				String messageId = rs.getString("message_id");
+				Timestamp insertDate = rs.getTimestamp("insert_at");
+				String name = rs.getString("name");
 
 				Comment comment = new Comment();
-				comment.setId(id);
-				comment.setUserId(userId);
-				comment.setMessageId(messageId);
+				comment.setMessageId(Integer.parseInt(messageId));
 				comment.setComment(text);
 				comment.setInsertDate(insertDate);
+				comment.setName(name);
 
 				ret.add(comment);
 			}

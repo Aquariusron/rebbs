@@ -6,10 +6,11 @@ import static utils.DBUtil.*;
 import java.sql.Connection;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import beans.User;
 import dao.UserDao;
 import utils.CipherUtil;
-
 public class UserService {
 
 	public void register(User user) {
@@ -43,8 +44,11 @@ public class UserService {
 		try {
 			connection = getConnection();
 
-			String encPassword = CipherUtil.encrypt(user.getPassword());
-			user.setPassword(encPassword);
+			//空だったら以下の処理をしないif..入ってたら以下の処理をする
+			if(!(StringUtils.isEmpty(user.getPassword()) == true)){
+				String encPassword = CipherUtil.encrypt(user.getPassword());
+				user.setPassword(encPassword);
+			}
 
 			UserDao userDao = new UserDao();
 			userDao.update(connection, user);

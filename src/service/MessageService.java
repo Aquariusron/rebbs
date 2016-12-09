@@ -59,4 +59,27 @@ public class MessageService {
 			close(connection);
 		}
 	}
+
+	public List<UserMessage> getComment() {
+
+		Connection connection = null;
+		try {
+			connection = getConnection();
+
+			UserMessageDao messageDao = new UserMessageDao();
+			List<UserMessage> ret = messageDao.getUserMessages(connection, LIMIT_NUM);
+
+			commit(connection);
+
+			return ret;
+		} catch (RuntimeException e) {
+			rollback(connection);
+			throw e;
+		} catch (Error e) {
+			rollback(connection);
+			throw e;
+		} finally {
+			close(connection);
+		}
+	}
 }

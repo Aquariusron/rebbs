@@ -15,6 +15,7 @@
 <div class="header">
 			<a href="signup">新規登録</a>
 			<a href="newMessage">新規投稿</a>
+			<a href="users">ユーザー管理</a>
 			<a href="login">ログイン</a>
 			<a href="logout">ログアウト</a>
 </div>
@@ -23,6 +24,15 @@
 <div class="profile">
 	<div class="name"><h2><c:out value="${loginUser.name}" /></h2></div>
 </div>
+<br />
+
+	<select name="messages">
+		<c:forEach items="${messages}" var="message">
+		<div class="date"><fmt:formatDate value="${message.insertDate}" pattern="yyyy/MM/dd HH:mm:ss" /></div>
+			<option value="${message.insertDate}" selected><c:out value="${message.insertDate}"></c:out></option>
+		</c:forEach>
+	</select>
+
 <br />
 <c:if test="${ not empty errorMessages }">
 	<div class="errorMessages">
@@ -42,22 +52,25 @@
 				<div class="account-name">
 					<span class="name"><c:out value="${message.name}" /></span>
 				</div>
+
 				<div class="subject"><c:out value="${message.subject}" /></div>
 				<div class="category"><c:out value="${message.category}" /></div>
 				<div class="text"><c:out value="${message.text}" /></div>
+				<div class="name"><c:out value="${message.name}" /></div>
 				<div class="date"><fmt:formatDate value="${message.insertDate}" pattern="yyyy/MM/dd HH:mm:ss" /></div>
 			</div>
 
 			<div class="comment">
 				<c:forEach items="${comments}" var="comment">
-					<c:if test="${comment.messageId == message.id}">
-							<div class="account-name">
-								<span class="name"><c:out value="${message.name}" /></span>
-							</div>
-							<%--これはログインしてるユーザーのIDを表示させるだけなのでいらない
-							<div class="user_id"><c:out value="${loginUser.id}" /></div> --%>
-							<div class="text"><c:out value="${comment.getComment()}" /></div>
-							<div class="date"><fmt:formatDate value="${comment.getInsertDate()}" pattern="yyyy/MM/dd HH:mm:ss" /></div>
+					<c:if test="${comment.id == message.id}">
+						<div class="account-name">
+							<span class="name"><c:out value="${message.name}" /></span>
+						</div>
+						<%--これはログインしてるユーザーのIDを表示させるだけなのでいらない
+						<div class="user_id"><c:out value="${loginUser.id}" /></div> --%>
+						<div class="text"><c:out value="${comment.getComment()}" /></div>
+						<%-- <div class="name"><c:out value="${comment.name}" /></div>--%>
+						<div class="date"><fmt:formatDate value="${comment.getInsertDate()}" pattern="yyyy/MM/dd HH:mm:ss" /></div>
 					</c:if>
 				</c:forEach>
 			</div>
@@ -74,8 +87,8 @@
 				</form>
 			</div>
 	</c:forEach>
-			<br />
-			<br />
+	<br />
+	<br />
 </div>
 <br />
 <br />

@@ -20,13 +20,33 @@ public class UserMessageDao {
 		PreparedStatement ps = null;
 		try {
 			StringBuilder sql = new StringBuilder();
-			sql.append("SELECT * FROM messages ");
-			sql.append("ORDER BY insert_dt DESC limit " + num);
+			sql.append("SELECT * FROM user_message ");
+			sql.append("ORDER BY insert_at DESC limit " + num);
 
 			ps = connection.prepareStatement(sql.toString());
 
 			ResultSet rs = ps.executeQuery();
 			List<UserMessage> ret = toUserMessageList(rs);
+			return ret;
+		} catch (SQLException e) {
+			throw new SQLRuntimeException(e);
+		} finally {
+			close(ps);
+		}
+	}
+
+	public List<UserMessage> getUserComments(Connection connection, int num) {
+
+		PreparedStatement ps = null;
+		try {
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT * FROM user_comment ");
+			sql.append("ORDER BY insert_dt DESC limit " + num);
+
+			ps = connection.prepareStatement(sql.toString());
+
+			ResultSet rs = ps.executeQuery();
+			List<UserMessage> ret = toUserCommentList(rs);
 			return ret;
 		} catch (SQLException e) {
 			throw new SQLRuntimeException(e);
@@ -41,20 +61,41 @@ public class UserMessageDao {
 		List<UserMessage> ret = new ArrayList<UserMessage>();
 		try {
 			while (rs.next()) {
-				int id = rs.getInt("id");
-				int userId = rs.getInt("user_id");
 				String subject = rs.getString("subject");
-				String category = rs.getString("category");
 				String text = rs.getString("text");
-				Timestamp insertDate = rs.getTimestamp("insert_dt");
+				String category = rs.getString("category");
+				Timestamp insertDate = rs.getTimestamp("insert_at");
 
 				UserMessage message = new UserMessage();
-				message.setId(id);
-				message.setUserId(userId);
 				message.setSubject(subject);
+				message.setText(text);
 				message.setCategory(category);
+				message.setInsertDate(insertDate);
+
+				ret.add(message);
+			}
+
+			return ret;
+		} finally {
+			close(rs);
+		}
+	}
+
+
+	private List<UserMessage> toUserCommentList(ResultSet rs)
+			throws SQLException {
+
+		List<UserMessage> ret = new ArrayList<UserMessage>();
+		try {
+			while (rs.next()) {
+				String text = rs.getString("text");
+				Timestamp insertDate = rs.getTimestamp("insert_dt");
+				String name = rs.getString("name");
+
+				UserMessage message = new UserMessage();
 				message.setText(text);
 				message.setInsertDate(insertDate);
+				message.setName(name);
 
 				ret.add(message);
 			}
