@@ -21,46 +21,48 @@
 	</div>
 	<c:remove var="errorMessages" scope="session"/>
 </c:if>
+
 <form action="signup" method="post"><br />
 	<label for="name">名前</label>
-	<input name="name" id="name" value="${editUser.name}"/><br />
-
+	<br /><input name="name" id="name" value="${editUser.name}" style="margin-left:70px;"/><br />
+	<br />
 	<label for="loginId">ログインID名</label>
-	<input name="loginId" id="loginId" value="${editUser.loginId}"/><br />
+	<br /><input name="loginId" id="loginId"
+	value="${editUser.loginId}" style="margin-left:70px;"/><br />
+	<br />
+	<label for="password">パスワード</label><br />
+	<input name="password" type="password" id="password" style="margin-left:70px;"/><br />
+	<br />
+	<label for="password_confirm">パスワードの確認</label><br />
+	<input name="password_confirm" type="password" id="password_confirm" style="margin-left:70px;"/><br />
+	<br />
+	<br />
+	支店：<select name="branchId">
+			<c:forEach items="${branches}" var="branch">
+				<c:if test="${ branch.id == editUser.branchId }">
+					<option value="${branch.id}" selected><c:out value="${branch.name}"></c:out></option>
+				</c:if>
+				<c:if test="${ branch.id != editUser.branchId }">
+					<option value="${branch.id}"><c:out value="${branch.name}"></c:out></option>
+				</c:if>
+			</c:forEach>
+		</select>
 
-	<label for="password">パスワード</label>
-	<input name="password" type="password" id="password"/> <br />
-
-	<label for="password_confirm">パスワードの確認</label>
-	<input name="password_confirm" type="password" id="password_confirm"/> <br />
-
-
-	<select name="branchId">
-		<c:forEach items="${branches}" var="branch">
-			<c:if test="${ branch.id == editUser.branchId }">
-				<option value="${branch.id}" selected><c:out value="${branch.name}"></c:out></option>
-			</c:if>
-			<c:if test="${ branch.id != editUser.branchId }">
-				<option value="${branch.id}"><c:out value="${branch.name}"></c:out></option>
-			</c:if>
-		</c:forEach>
-	</select>
-
-	<select name="positionId">
-		<c:forEach items="${positions}" var="position">
-			<c:if test="${ position.id == editUser.postId }">
-				<option value="${position.id}"><c:out value="${position.name}"></c:out></option>
-			</c:if>
-			<c:if test="${ position.id != editUser.postId }">
-				<option value="${position.id}"><c:out value="${position.name}"></c:out></option>
-			</c:if>
-
-		</c:forEach>
-	</select>
-
-	<input type="submit" value="登録" /> <br />
-	<a href="./">戻る</a>
+	役職：<select name="positionId">
+			<c:forEach items="${positions}" var="position">
+				<c:if test="${ position.id == editUser.postId }">
+					<option value="${position.id}"><c:out value="${position.name}"></c:out></option>
+				</c:if>
+				<c:if test="${ position.id != editUser.postId }">
+					<option value="${position.id}"><c:out value="${position.name}"></c:out></option>
+				</c:if>
+			</c:forEach>
+			</select>
+	<input type="submit" value="登録" /><br />
 </form>
+<br />
+<a href="./">戻る</a>
+<br />
 <div class="copyright">Copyright(c)Akane Yamashita</div>
 </div>
 </body>

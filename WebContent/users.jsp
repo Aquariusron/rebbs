@@ -25,37 +25,37 @@
 <br />
 <div class="users">
 <%--userをfor文で回してIDと名前を一覧表示したい --%>
+
 	<c:forEach items="${users}" var="user">
-		<br />
-		<div class="message">
-			<div class="account-name">
-				<a href="settings?id=${user.id}" >
-				<span class="name"><c:out value="${user.name}" /></span></a>
+		<TABLE cellpadding="15"><TR><TD>
+			<div class="message">
+				<div class="account-name">
+				<a href="settings?id=${user.id}" ><span class="name"><c:out value="${user.name}" /></span></a></div>
+				<br />
+				<div class="subject">ログインID ：
+					<TABLE cellpadding-lhs="100"><TR><TD>
+						<c:out value="${user.loginId}" /></div>
+					</TD></TR></TABLE>
+				<form action="stopuser" method="post">
+					<input type="hidden" name="userid" value="${user.id}">
+						<c:if test="${ user.stop  == true }">
+							アカウント：<button name="stop" type="submit" value="false" onclick="alert('アカウントを停止しますか？')"  style="margin-left:15px;">停止</button>
+							<input type ="hidden" name="id" value="${user.id}">
+							<input type ="hidden" name="stop" value="${user.stop}">
+						</c:if>
+						<c:if test="${ user.stop  == false }">
+							<button name="stop" type="submit"  value="true" onclick="alert('アカウントを復活させますか？')">復活</button>
+							<input type ="hidden" name="id" value="${user.id}">
+							<input type ="hidden" name="stop" value="${user.stop}">
+						</c:if>
+				</form>
 			</div>
-			<div class="subject"><c:out value="${user.loginId}" /></div>
-			<form action="stopuser" method="post">
-				<input type="hidden" name="userid" value="${user.id}">
-					<c:if test="${ user.stop  == true }">
-						<button name="stop" type="submit" value="false" onclick="alert('アカウントを停止しますか？')">停止</button>
-						<input type ="hidden" name="id" value="${user.id}">
-						<input type ="hidden" name="stop" value="${user.stop}">
-					</c:if>
-					<c:if test="${ user.stop  == false }">
-						<button name="stop" type="submit"  value="true" onclick="alert('アカウントを復活させますか？')">復活</button>
-						<input type ="hidden" name="id" value="${user.id}">
-						<input type ="hidden" name="stop" value="${user.stop}">
-
-					</c:if>
-			</form>
-		</div>
 			<br />
+			</TD></TR></TABLE>
 	</c:forEach>
-			<br />
-			<br />
+		<br />
+		<br />
 </div>
-<br />
-<br />
-
 <br />
 <br />
 <br />

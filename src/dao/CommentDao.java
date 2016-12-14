@@ -40,12 +40,14 @@ public class CommentDao {
 		try {
 			while (rs.next()) {
 				String text = rs.getString("text");
-				String messageId = rs.getString("message_id");
+				String commentId = rs.getString("id");
+				int messageId = rs.getInt("message_id");;
 				Timestamp insertDate = rs.getTimestamp("insert_at");
 				String name = rs.getString("name");
 
 				Comment comment = new Comment();
-				comment.setMessageId(Integer.parseInt(messageId));
+				comment.setMessageId(messageId);
+				comment.setCommentId(Integer.parseInt(commentId));
 				comment.setComment(text);
 				comment.setInsertDate(insertDate);
 				comment.setName(name);

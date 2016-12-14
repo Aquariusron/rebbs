@@ -22,20 +22,26 @@
 	</div>
 	<c:remove var="errorMessages" scope="session"/>
 </c:if>
-
+<a href="users">戻る</a>
+<br />
+<br />
 <form action="settings" method="post" enctype="multipart/form-data"><br />
 	<label for="name">名前</label>
-	<input name="name" value="${editUser.name}" id="name"/><br />
+	<br />
+	<input name="name" value="${editUser.name}" id="name" style="margin-left:70px;"/><br />
 
 	<label for="account">ログインID</label>
-	<input name="account" value="${editUser.loginId}" /><br />
+	<br />
+	<input name="account" value="${editUser.loginId}" style="margin-left:70px;"/><br />
 
 	<label for="password">パスワード</label>
-	<input name="password" id="password"/> <br />
+	<br />
+	<input name="password" id="password" style="margin-left:70px;"/> <br />
 	<label for="password">パスワードの確認</label>
-	<input name="password_confirm" id="password"/> <br />
+	<br />
+	<input name="password_confirm" id="password" style="margin-left:70px;"/> <br />
 
-
+	<br />
 	<select name="branchId">
 		<c:forEach items="${branches}" var="branch">
 			<c:if test="${ branch.id == editUser.branchId }">
@@ -58,10 +64,14 @@
 
 		</c:forEach>
 	</select>
-	<input type="submit" value="変更" /> <br />
-	<a href="users">戻る</a>
+	<input type="submit" value="変更" style="margin-left:45px;"/>
+	<br />
+	<br />
 </form>
+<br />
+<br />
 <div class="copyright">Copyright(c)Akane Yamashita</div>
 </div>
+
 </body>
 </html>

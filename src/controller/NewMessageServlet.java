@@ -45,6 +45,7 @@ public class NewMessageServlet extends HttpServlet {
 		message.setCategory(request.getParameter("category"));
 		message.setText(request.getParameter("text"));
 		message.setUserId(user.getId());
+		message.setId(user.getId());
 
 		if (isValid(request, messages) == true) {
 			new MessageService().register(message);
@@ -71,9 +72,9 @@ public class NewMessageServlet extends HttpServlet {
 		if (StringUtils.isBlank(subject) == true) {
 			messages.add("件名を入力してください");
 		}
-//		if (1000 < message.length()) {
-//			messages.add("1000文字以下で入力してください");
-//		}
+		if (10 < message.length()) {
+			messages.add("1000文字以下で入力してください");
+		}
 		System.out.println(message);
 		if (messages.size() == 0) {
 			return true;

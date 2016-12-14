@@ -34,17 +34,85 @@ public class MessageService {
 		}
 	}
 
-
-	private static final int LIMIT_NUM = 1000;
-
-	public List<UserMessage> getMessage() {
+	public UserMessage getOld() {
 
 		Connection connection = null;
 		try {
 			connection = getConnection();
 
 			UserMessageDao messageDao = new UserMessageDao();
-			List<UserMessage> ret = messageDao.getUserMessages(connection, LIMIT_NUM);
+			UserMessage old = messageDao.getOldDate(connection);
+
+			commit(connection);
+
+			return old;
+		} catch (RuntimeException e) {
+			rollback(connection);
+			throw e;
+		} catch (Error e) {
+			rollback(connection);
+			throw e;
+		} finally {
+			close(connection);
+		}
+	}
+
+	public UserMessage getNew() {
+
+		Connection connection = null;
+		try {
+			connection = getConnection();
+
+			UserMessageDao messageDao = new UserMessageDao();
+			UserMessage current = messageDao.getNewDate(connection);
+
+			commit(connection);
+
+			return current;
+		} catch (RuntimeException e) {
+			rollback(connection);
+			throw e;
+		} catch (Error e) {
+			rollback(connection);
+			throw e;
+		} finally {
+			close(connection);
+		}
+	}
+
+	public List<UserMessage> getCategory() {
+
+		Connection connection = null;
+		try {
+			connection = getConnection();
+
+			UserMessageDao messageDao = new UserMessageDao();
+			List<UserMessage> ret = messageDao.getCategories(connection);
+
+			commit(connection);
+
+			return ret;
+		} catch (RuntimeException e) {
+			rollback(connection);
+			throw e;
+		} catch (Error e) {
+			rollback(connection);
+			throw e;
+		} finally {
+			close(connection);
+		}
+	}
+
+	private static final int LIMIT_NUM = 1000;
+
+	public List<UserMessage> getMessage(String category, String current, String old) {
+
+		Connection connection = null;
+		try {
+			connection = getConnection();
+
+			UserMessageDao messageDao = new UserMessageDao();
+			List<UserMessage> ret = messageDao.getUserMessages(connection, category, current, old, LIMIT_NUM);
 
 			commit(connection);
 
@@ -67,7 +135,7 @@ public class MessageService {
 			connection = getConnection();
 
 			UserMessageDao messageDao = new UserMessageDao();
-			List<UserMessage> ret = messageDao.getUserMessages(connection, LIMIT_NUM);
+			List<UserMessage> ret = messageDao.getUserComments(connection, LIMIT_NUM);
 
 			commit(connection);
 

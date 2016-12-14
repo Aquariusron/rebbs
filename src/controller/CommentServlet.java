@@ -37,9 +37,11 @@ public class CommentServlet extends HttpServlet {
 		User user = (User) session.getAttribute("loginUser");
 
 		Comment comment = new Comment();
-		comment.setComment(request.getParameter("text"));
 		comment.setMessageId(Integer.parseInt(request.getParameter("message_id")));
+		comment.setComment(request.getParameter("text"));
 		comment.setUserId(user.getId());
+		comment.setName(user.getName());
+		System.out.println(comment.getMessageId());
 
 		if (isValid(request, comments) == true) {
 			new CommentService().register(comment);

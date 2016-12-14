@@ -188,8 +188,6 @@ public class UserDao {
 
 			ps.setBoolean(1, user.getStop());
 			ps.setInt(2, user.getId());
-			System.out.println(ps);
-
 
 			int count = ps.executeUpdate();
 			if (count == 0) {

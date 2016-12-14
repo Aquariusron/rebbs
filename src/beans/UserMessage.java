@@ -16,13 +16,6 @@ public class UserMessage implements Serializable {
 	private String category;
 	private Date insertDate;
 
-//	public String getAccount() {
-//		return account;
-//	}
-//
-//	public void setAccount(String account) {
-//		this.account = account;
-//	}
 
 	public int getLoginId() {
 		return loginId;
@@ -81,11 +74,11 @@ public class UserMessage implements Serializable {
 		this.category = category;
 	}
 
-	public Date getInsertDate() {
+	public Date getDate() {
 		return insertDate;
 	}
 
-	public void setInsertDate(Date insertDate) {
+	public void setDate(Date insertDate) {
 		this.insertDate = insertDate;
 	}
 

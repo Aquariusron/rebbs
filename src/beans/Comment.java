@@ -10,6 +10,7 @@ public class Comment implements Serializable {
 	private int id;
 	private int user_id;
 	private int message_id;
+	private int comment_id;
 	private Date insert_dt;
 	private Date update_dt;
 
@@ -66,5 +67,12 @@ public class Comment implements Serializable {
 
 	public void setMessageId(int message_id) {
 		this.message_id = message_id;
+	}
+	public int getCommentId() {
+		return comment_id;
+	}
+
+	public void setCommentId(int comment_id) {
+		this.comment_id = comment_id;
 	}
 }
