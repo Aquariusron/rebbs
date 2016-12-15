@@ -103,7 +103,6 @@ public class UserMessageDao {
 			if(!StringUtils.isEmpty(category)){
 				sql.append("and category = ?");
 			}
-
 			ps = connection.prepareStatement(sql.toString());
 
 			ps.setString(1, old);

@@ -72,7 +72,7 @@ public class NewMessageServlet extends HttpServlet {
 		if (StringUtils.isBlank(subject) == true) {
 			messages.add("件名を入力してください");
 		}
-		if (10 < message.length()) {
+		if (1000 < message.length()) {
 			messages.add("1000文字以下で入力してください");
 		}
 		System.out.println(message);

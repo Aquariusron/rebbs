@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -36,8 +37,9 @@ public class TopServlet extends HttpServlet{
 		// DBから１番古い日付を取得　servlet → service → dao
 		//UserList型からカテゴリーやメッセージ、ほかの情報からinsertDtだけをStringで抜く
 		if(StringUtils.isEmpty(currentDate)){
-			String insertDate = new MessageService().getNew().getDate().toString();
-			currentDate = insertDate;
+//			String insertDate = new MessageService().getNew().getDate().toString();
+			SimpleDateFormat sdf = new SimpleDateFormat("y/M/d H:m:s");
+			System.out.println(sdf);
 		}
 		if(StringUtils.isEmpty(oldDate)){
 			String insertDate = new MessageService().getOld().getDate().toString();
@@ -47,7 +49,6 @@ public class TopServlet extends HttpServlet{
 
 		List<UserMessage> messages = new MessageService().getMessage(category,currentDate,oldDate);
 		request.setAttribute("selectedCategory", category);
-
 
 		List<UserMessage> categories = new MessageService().getCategory();
 		request.setAttribute("categories", categories);

@@ -63,6 +63,14 @@ public class User implements Serializable {
 		return postId;
 	}
 
+	public boolean isHeadOffice() {
+		return this.branchId == 1;
+	}
+
+	public boolean isHumanResource() {
+		return this.postId == 1;
+	}
+
 	public void setPostId(int postId) {
 		this.postId = postId;
 	}

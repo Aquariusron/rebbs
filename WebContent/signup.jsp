@@ -23,14 +23,14 @@
 </c:if>
 
 <form action="signup" method="post"><br />
-	<label for="name">名前</label>
+	<label for="name">名前(10文字以下)</label>
 	<br /><input name="name" id="name" value="${editUser.name}" style="margin-left:70px;"/><br />
 	<br />
-	<label for="loginId">ログインID名</label>
+	<label for="loginId">ログインID名(6文字以上20文字以下)</label>
 	<br /><input name="loginId" id="loginId"
 	value="${editUser.loginId}" style="margin-left:70px;"/><br />
 	<br />
-	<label for="password">パスワード</label><br />
+	<label for="password">パスワード(6文字以上255文字以下)</label><br />
 	<input name="password" type="password" id="password" style="margin-left:70px;"/><br />
 	<br />
 	<label for="password_confirm">パスワードの確認</label><br />

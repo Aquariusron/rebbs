@@ -53,7 +53,7 @@
 			</c:forEach>
 		</ul>
 	</div>
-	<c:remove var="errorMessages" scope="session"/>
+<c:remove var="errorMessages" scope="session"/>
 </c:if>
 <br />
 <div class="messages">

@@ -120,6 +120,12 @@ public class SignUpServlet extends HttpServlet {
 				messages.add("パスワードを確認してください");
 				//配列に文を追加
 			}
+			if(6 > password.length() || password.length() > 255) {
+				messages.add("指定の文字数を入力してください");
+			}
+			if(6 > loginId.length() || loginId.length() > 20) {
+				messages.add("指定の文字数を入力してください");
+			}
 			if(messages.size() == 0){
 			//入力抜けがなければ処理を抜ける
 				return true;
