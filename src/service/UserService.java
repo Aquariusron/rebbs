@@ -13,6 +13,29 @@ import dao.UserDao;
 import utils.CipherUtil;
 public class UserService {
 
+	public User setLoginId(String loginId) {
+
+		Connection connection = null;
+		try {
+			connection = getConnection();
+
+			UserDao userDao = new UserDao();
+			User user = userDao.rsLoginId(connection, loginId);
+
+			commit(connection);
+
+			return user;
+		} catch (RuntimeException e) {
+			rollback(connection);
+			throw e;
+		} catch (Error e) {
+			rollback(connection);
+			throw e;
+		} finally {
+			close(connection);
+		}
+	}
+
 	public void register(User user) {
 
 		Connection connection = null;

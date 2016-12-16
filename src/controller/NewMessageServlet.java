@@ -75,6 +75,12 @@ public class NewMessageServlet extends HttpServlet {
 		if (1000 < message.length()) {
 			messages.add("1000文字以下で入力してください");
 		}
+		if (category.length() < 10) {
+			messages.add("10文字以下で入力してください");
+		}
+		if (subject.length() < 50) {
+			messages.add("50文字以下で入力してください");
+		}
 		System.out.println(message);
 		if (messages.size() == 0) {
 			return true;

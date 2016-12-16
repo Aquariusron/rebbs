@@ -11,7 +11,9 @@
 </head>
 <body>
 <div class="main-contents">
-
+<a href="users">戻る</a>
+<br />
+<br />
 <c:if test="${ not empty errorMessages }">
 	<div class="errorMessages">
 		<ul>
@@ -22,25 +24,27 @@
 	</div>
 	<c:remove var="errorMessages" scope="session"/>
 </c:if>
-<a href="users">戻る</a>
-<br />
+
 <br />
 <form action="settings" method="post" enctype="multipart/form-data"><br />
-	<label for="name">名前</label>
+	<label for="name">名前(10文字以下)</label>
 	<br />
 	<input name="name" value="${editUser.name}" id="name" style="margin-left:70px;"/><br />
-
-	<label for="account">ログインID</label>
+	<br />
+	<label for="account">ログインID(6文字以上20文字以下)</label>
 	<br />
 	<input name="account" value="${editUser.loginId}" style="margin-left:70px;"/><br />
-
-	<label for="password">パスワード</label>
 	<br />
-	<input name="password" id="password" style="margin-left:70px;"/> <br />
+	<br />
+	<label for="password">パスワード(6文字以上255文字以下)</label>
+	<br />
+	<input name="password" id="password" style="margin-left:70px;"/>
+	<br />
+	<br />
 	<label for="password">パスワードの確認</label>
 	<br />
 	<input name="password_confirm" id="password" style="margin-left:70px;"/> <br />
-
+	<br />
 	<br />
 	<select name="branchId">
 		<c:forEach items="${branches}" var="branch">

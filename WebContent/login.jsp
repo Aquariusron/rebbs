@@ -6,7 +6,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>ログイン</title>
+	<title>掲示板　ログイン画面</title>
 	<link href="./css/style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
@@ -26,14 +26,13 @@
 <form action="login" method="post"><br />
 	<label for="loginId">ログインID</label>
 	<input name="loginId" id="loginId"/> <br />
-
+	<br />
 	<label for="password">パスワード</label>
 	<input name="password" type="password" id="password"/> <br />
-
-
-	<input type="submit" value="ログイン" /> <br />
-	<a href="./">戻る</a>
+	<br />
+	<input type="submit" value="ログイン" />
 </form>
+<br />
 <div class="copyright">Copyright(c)Akane Yamashita</div>
 </div>
 </body>

@@ -90,9 +90,7 @@ public class SignUpServlet extends HttpServlet {
 				request.getRequestDispatcher("/signup.jsp").forward(request, response);
 				//response.sendRedirect("signup");
 				//signupページに遷移するようレスポンスする
-
 			}
-
 		}
 
 		private boolean isValid(HttpServletRequest request,
@@ -106,25 +104,34 @@ public class SignUpServlet extends HttpServlet {
 
 			String passwordConfirm = request.getParameter("password_confirm");
 
+			User user = new User();
+			String rsLoginId = new UserService().setLoginId(loginId).toString();
+
+			System.out.println(rsLoginId);
+			//すでに使われているIDを重複しないようにする
 			if(StringUtils.isEmpty(loginId) == true) {
 				messages.add("ログインIDを入力してください");
 				//入力フォームに何も打ち込まれていなかったら
-				//配列に文を追加
+			}
+			//入力されたユーザーIdが存在しているかを条件式にする
+			if(rsLoginId != null) {
+				messages.add("このログインIDは使用済みです");
+				//すでに使われているIDを重複しないようにする
+			}
+			if(6 > loginId.length() || loginId.length() < 20){
+				messages.add("6文字以上20文字以内で入力してください：ログインID");
 			}
 			if(StringUtils.isEmpty(password) == true) {
 				messages.add("パスワードを入力してください");
-				//入力フォームに何も打ち込まれていなかったら
-				//配列に文を追加
 			}
 			if(!password.equals(passwordConfirm)) {
 				messages.add("パスワードを確認してください");
-				//配列に文を追加
 			}
 			if(6 > password.length() || password.length() > 255) {
-				messages.add("指定の文字数を入力してください");
+				messages.add("6文字以上255文字以内で入力してください：パスワード");
 			}
 			if(6 > loginId.length() || loginId.length() > 20) {
-				messages.add("指定の文字数を入力してください");
+				messages.add("6文字以上20文字以内で入力してください：ログインID");
 			}
 			if(messages.size() == 0){
 			//入力抜けがなければ処理を抜ける

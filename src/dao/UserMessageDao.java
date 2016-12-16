@@ -106,12 +106,11 @@ public class UserMessageDao {
 			ps = connection.prepareStatement(sql.toString());
 
 			ps.setString(1, old);
-			ps.setString(2, current);
+			ps.setString(2, current + " 23:59:59");
 
 			if(!StringUtils.isEmpty(category)){
 				ps.setString(3, category);
 			}
-
 
 			ResultSet rs = ps.executeQuery();
 			List<UserMessage> ret = toUserMessageList(rs);

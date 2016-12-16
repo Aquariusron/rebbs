@@ -17,6 +17,31 @@ import exception.NoRowsUpdatedRuntimeException;
 import exception.SQLRuntimeException;
 
 public class UserDao {
+	public User rsLoginId(Connection connection, String loginId) {
+
+		PreparedStatement ps = null;
+		try {
+			String sql = "SELECT * FROM users WHERE login_id = ? ";
+
+			ps = connection.prepareStatement(sql);
+			ps.setString(1, loginId);
+
+			ResultSet rs = ps.executeQuery();
+			List<User> userList = toUserList(rs);
+
+			if (userList.isEmpty() == true) {
+				return null;
+			} else if (2 <= userList.size()) {
+				throw new IllegalStateException("2 <= userList.size()");
+			} else {
+				return userList.get(0);
+			}
+		} catch (SQLException e) {
+			throw new SQLRuntimeException(e);
+		} finally {
+			close(ps);
+		}
+	}
 
 	public User getUser(Connection connection, String loginId,
 			String password) {
@@ -47,7 +72,7 @@ public class UserDao {
 
 	private List<User> toUserList(ResultSet rs) throws SQLException {
 
-		List<User> ret = new ArrayList<User>();
+		List<User> ret = new ArrayList<>();
 		try {
 			while (rs.next()) {
 				int id = rs.getInt("id");
@@ -72,7 +97,6 @@ public class UserDao {
 				user.setStop(stop);
 
 				ret.add(user);
-				System.out.println(ret);
 			}
 
 			return ret;
@@ -89,7 +113,6 @@ public class UserDao {
 		try {
 			StringBuilder sql = new StringBuilder();
 			sql.append("INSERT INTO users ( ");
-//			sql.append("id");今回はHSQLのシーケンスの処理をするためのもの
 			sql.append("login_id");
 			sql.append(", password");
 			sql.append(", name");
@@ -138,7 +161,7 @@ public class UserDao {
 			sql.append(", post_id = ?");
 			sql.append(", update_at = CURRENT_TIMESTAMP");
 			//空だったら以下をするーするif
-			if(!(StringUtils.isEmpty(user.getPassword()) == true)){
+			if(!StringUtils.isEmpty(user.getPassword()) == true){
 				sql.append(", password = ?");
 			}
 			sql.append(" WHERE");
@@ -146,21 +169,22 @@ public class UserDao {
 			sql.append(" AND");
 			sql.append(" update_at = ?");
 
-
 			ps = connection.prepareStatement(sql.toString());
 
 			ps.setString(1, user.getLoginId());
 			ps.setString(2, user.getName());
 			ps.setInt(3, user.getBranchId());
 			ps.setInt(4, user.getPostId());
-			if(!(StringUtils.isEmpty(user.getPassword()) == true)){
+			if(!StringUtils.isEmpty(user.getPassword()) == true){
 				ps.setString(5, user.getPassword());
+				ps.setInt(6, user.getId());
+				ps.setTimestamp(7,
+						new Timestamp(user.getUpdateAt().getTime()));
+			} else {
+				ps.setInt(5, user.getId());
+				ps.setTimestamp(6,
+						new Timestamp(user.getUpdateAt().getTime()));
 			}
-			ps.setInt(6, user.getId());
-			ps.setTimestamp(7,
-					new Timestamp(user.getUpdateAt().getTime()));
-
-
 			int count = ps.executeUpdate();
 			if (count == 0) {
 				throw new NoRowsUpdatedRuntimeException();

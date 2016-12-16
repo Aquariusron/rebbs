@@ -59,45 +59,44 @@
 <div class="messages">
 	<c:forEach items="${messages}" var="message">
 		<br />
+		<div class="message">
+			<TABLE><TR><TH><TD>
+				<div class="subject"><c:out value="■${message.subject}" /></div><br />
+				<div class="category"><c:out value="□${message.category}" /></div><br />
+				<div class="text"><c:out value="${message.text}" /></div>
 
-			<div class="message">
-				<TABLE><TR><TH><TD>
-					<div class="subject"><c:out value="■${message.subject}" /></div><br />
-					<div class="category"><c:out value="□${message.category}" /></div><br />
-					<div class="text"><c:out value="${message.text}" /></div>
-
-					<div class="date"><fmt:formatDate value="${message.getDate()}" pattern="yyyy/MM/dd HH:mm:ss" />
-					<c:out value="${message.name}" /></div>
-				</TH></TD></TR></TABLE>
-			</div>
-			<hr>
-			<div class="comment">
-				<TABLE><TR><TH><TD>
-					<c:forEach items="${comments}" var="comment">
-						<c:if test="${comment.messageId == message.id}">
-							<div class="text"><c:out value="${comment.getComment()}" /></div>
-							<div class="date"><fmt:formatDate value="${comment.getInsertDate()}" pattern="yyyy/MM/dd HH:mm:ss" />
-							<c:out value="${comment.name}" /></div><br />
-						</c:if>
-					</c:forEach>
-				</TH></TD></TR></TABLE>
-			</div>
-			<br />
-			<div class="form-area">
-				<form action="comment" method="post">
-					コメント：<br />
-					<TEXTAREA cols="70" rows="5" name="text"></TEXTAREA>
-					<%--どのメッセージに紐つけているか値を飛ばす --%>
-					<input type ="hidden" name="message_id" value="${message.id}">
-					<br />
-					<br />
-					<input type="submit" value="返信する">(500文字まで)
-					<br />
-					<br />
-				</form>
-			</div>
-			<br />
-	</c:forEach>
+				<div class="date"><fmt:formatDate value="${message.getDate()}" pattern="yyyy/MM/dd HH:mm:ss" />
+				<c:out value="${message.name}" /></div>
+			</TH></TD></TR></TABLE>
+		</div>
+		<hr>
+		<div class="comment">
+			<TABLE><TR><TH><TD>
+				<c:forEach items="${comments}" var="comment">
+					<c:if test="${comment.messageId == message.id}">
+						<div class="text"><c:out value="${comment.getComment()}" /></div>
+						<div class="date"><fmt:formatDate value="${comment.getInsertDate()}" pattern="yyyy/MM/dd HH:mm:ss" />
+						<c:out value="${comment.name}" /></div><br />
+					</c:if>
+				</c:forEach>
+			</TH></TD></TR></TABLE>
+		</div>
+		<br />
+		<div class="form-area">
+			<form action="comment" method="post">
+				コメント：<br />
+				<TEXTAREA cols="70" rows="5" name="text"></TEXTAREA>
+				<%--どのメッセージに紐つけているか値を飛ばす --%>
+				<input type ="hidden" name="message_id" value="${message.id}">
+				<br />
+				<br />
+				<input type="submit" value="返信する">(500文字まで)
+				<br />
+				<br />
+			</form>
+		</div>
+		<br />
+</c:forEach>
 	<br />
 	<br />
 	<br />

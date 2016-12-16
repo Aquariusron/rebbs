@@ -67,21 +67,12 @@ public class SettingsServlet extends HttpServlet {
 				session.removeAttribute("editUser");
 				messages.add("他の人によって更新されています。最新のデータを表示しました。データを確認してください。");
 				session.setAttribute("errorMessages", messages);
-//				response.sendRedirect("settings.jsp");
-
 			}
-
-//			session.setAttribute("loginUser", editUser);
 			session.removeAttribute("editUser");
-
 			response.sendRedirect("users");
-
 		} else {
-
 			session.setAttribute("errorMessages", messages);
-//			session.setAttribute("loginUser", editUser);
 			response.sendRedirect("settings.jsp");
-//			request.getRequestDispatcher("settings.jsp").forward(request, response);
 		}
 	}
 
@@ -97,10 +88,8 @@ public class SettingsServlet extends HttpServlet {
 		editUser.setLoginId(request.getParameter("account"));
 		editUser.setBranchId(Integer.parseInt(request.getParameter("branchId")));
 		editUser.setPostId(Integer.parseInt(request.getParameter("positionId")));
+		editUser.setPassword(request.getParameter("password"));
 
-		if(!(StringUtils.isEmpty(password) == true)){
-			editUser.setPassword(request.getParameter("password"));
-		}
 
 		return editUser;
 	}
@@ -108,25 +97,35 @@ public class SettingsServlet extends HttpServlet {
 
 	private boolean isValid(HttpServletRequest request, List<String> messages) {
 
+		String name = request.getParameter("name");
 		String account = request.getParameter("account");
 		String password = request.getParameter("password");
 		String passwordConfirm = request.getParameter("password_confirm");
 
+		if(StringUtils.isEmpty(name)){
+			messages.add("名前を入力してください");
+		}
 		if (StringUtils.isEmpty(account) == true) {
 			messages.add("ログインIDを入力してください");
 		}
-//		if (StringUtils.isEmpty(password) == true) {
-//			messages.add("パスワードを入力してください");
-//		}
-//		if (StringUtils.isEmpty(password) == true) {
-//			editUser.setPassword(editUser.getPassword());
-//		} else {
-//			editUser.setPassword(request.getParameter("password"));
-//		}
-		if (!(password.equals(passwordConfirm))) {
-			messages.add("パスワードを確認してください");
+		if(!StringUtils.isEmpty(password) || !StringUtils.isEmpty(passwordConfirm)){
+			if (StringUtils.isEmpty(password) == true) {
+				messages.add("パスワードを入力してください");
+			}
+			if (!(password.equals(passwordConfirm))) {
+				messages.add("パスワードを確認してください");
+			}
+			if (6 > password.length() || password.length() > 255) {
+				messages.add("6文字以上255文字以下で入力してください：パスワード");
+			}
 		}
-		// TODO アカウントが既に利用されていないか、メールアドレスが既に登録されていないかなどの確認も必要
+		if (10 < name.length()) {
+			messages.add("10文字以内で入力してください:名前");
+		}
+		if (6 > account.length() || account.length() > 20) {
+			messages.add("6文字以上20文字以内で入力してください：ログインID");
+		}
+		// アカウントが既に利用されていないか、メールアドレスが既に登録されていないかなどの確認も必要
 		if (messages.size() == 0) {
 			return true;
 		} else {
