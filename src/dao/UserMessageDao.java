@@ -59,7 +59,7 @@ public class UserMessageDao {
 		PreparedStatement ps = null;
 		try {
 			StringBuilder sql = new StringBuilder();
-			sql.append("SELECT * FROM user_message ORDER BY insert_dt DESC limit 1");
+			sql.append("SELECT * FROM user_message ORDER BY insert_at DESC limit 1");
 
 			ps = connection.prepareStatement(sql.toString());
 
@@ -78,7 +78,7 @@ public class UserMessageDao {
 		PreparedStatement ps = null;
 		try {
 			StringBuilder sql = new StringBuilder();
-			sql.append("SELECT * FROM user_message ORDER BY insert_dt ASC limit 1");
+			sql.append("SELECT * FROM user_message ORDER BY insert_at ASC limit 1");
 
 			ps = connection.prepareStatement(sql.toString());
 
@@ -98,7 +98,7 @@ public class UserMessageDao {
 		try {
 			StringBuilder sql = new StringBuilder();
 
-			sql.append("SELECT * FROM user_message where insert_dt between ? and ? ");
+			sql.append("SELECT * FROM user_message where insert_at between ? and ? ");
 
 			if(!StringUtils.isEmpty(category)){
 				sql.append("and category = ?");
@@ -133,7 +133,7 @@ public class UserMessageDao {
 				String subject = rs.getString("subject");
 				String text = rs.getString("text");
 				String category = rs.getString("category");
-				Timestamp insertDate = rs.getTimestamp("insert_dt");
+				Timestamp insertDate = rs.getTimestamp("insert_at");
 				String name = rs.getString("name");
 				int id = rs.getInt("id");
 
@@ -159,8 +159,8 @@ public class UserMessageDao {
 		PreparedStatement ps = null;
 		try {
 			StringBuilder sql = new StringBuilder();
-			sql.append("SELECT * FROM user_comment ");
-			sql.append("ORDER BY insert_dt DESC limit " + num);
+			sql.append("SELECT * FROM user_comments");
+			sql.append("ORDER BY insert_at DESC limit " + num);
 
 			ps = connection.prepareStatement(sql.toString());
 
@@ -180,7 +180,7 @@ public class UserMessageDao {
 		try {
 			while (rs.next()) {
 				String text = rs.getString("text");
-				Timestamp insertDate = rs.getTimestamp("insert_dt");
+				Timestamp insertDate = rs.getTimestamp("insert_at");
 				String name = rs.getString("name");
 
 				UserMessage message = new UserMessage();

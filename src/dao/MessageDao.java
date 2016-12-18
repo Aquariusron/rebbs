@@ -22,8 +22,8 @@ public class MessageDao {
 			sql.append(", subject");
 			sql.append(", category");
 			sql.append(", text");
-			sql.append(", insert_dt");
-			sql.append(", update_dt");
+			sql.append(", insert_at");
+			sql.append(", update_at");
 			sql.append(") VALUES (");
 			sql.append(" ?"); // subject
 			sql.append(", ?"); // category

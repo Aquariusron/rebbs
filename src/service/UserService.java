@@ -12,6 +12,28 @@ import beans.User;
 import dao.UserDao;
 import utils.CipherUtil;
 public class UserService {
+	public User passUser(int userId) {
+		Connection connection = null;
+		try {
+			connection = getConnection();
+
+			UserDao userDao = new UserDao();
+			User user = userDao.getLoginId(connection, userId);
+
+			commit(connection);
+
+			return user;
+		} catch (RuntimeException e) {
+			rollback(connection);
+			throw e;
+		} catch (Error e) {
+			rollback(connection);
+			throw e;
+		} finally {
+			close(connection);
+		}
+	}
+
 
 	public User setLoginId(String loginId) {
 
