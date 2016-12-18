@@ -97,16 +97,30 @@ public class SettingsServlet extends HttpServlet {
 
 	private boolean isValid(HttpServletRequest request, List<String> messages) {
 
+		String id = request.getParameter("id");
+		int userId = Integer.parseInt(id);
+		//↑2016.12.18
 		String name = request.getParameter("name");
 		String account = request.getParameter("account");
 		String password = request.getParameter("password");
 		String passwordConfirm = request.getParameter("password_confirm");
+
+		String MyId = new UserService().passUser(userId).toString();
+		//↑2016.12.18
+		String OtherId = new UserService().setLoginId(account).toString();
 
 		if(StringUtils.isEmpty(name)){
 			messages.add("名前を入力してください");
 		}
 		if (StringUtils.isEmpty(account) == true) {
 			messages.add("ログインIDを入力してください");
+		}
+		//2016.12.18 編集中のユ－ザ－IDとDB内の自分のIDと比較するメソッド
+		if(MyId != account){
+		}
+		//2016.12.18 上のバリデを終えて他のユ－ザ－のIDと比較するメソッド
+		if(OtherId == account){
+			messages.add("このログインIDは使用済みです");
 		}
 		if(!StringUtils.isEmpty(password) || !StringUtils.isEmpty(passwordConfirm)){
 			if (StringUtils.isEmpty(password) == true) {
@@ -125,7 +139,6 @@ public class SettingsServlet extends HttpServlet {
 		if (6 > account.length() || account.length() > 20) {
 			messages.add("6文字以上20文字以内で入力してください：ログインID");
 		}
-		// アカウントが既に利用されていないか、メールアドレスが既に登録されていないかなどの確認も必要
 		if (messages.size() == 0) {
 			return true;
 		} else {
