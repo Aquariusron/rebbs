@@ -7,11 +7,13 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>掲示板　ログイン画面</title>
-	<link href="./css/style.css" rel="stylesheet" type="text/css">
+	<link href="bbs.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <div class="main-contents">
-
+<div class="title">
+	<div class="title"><h2>掲示板　ログイン画面</h2></div>
+</div>
 <c:if test="${ not empty errorMessages }">
 	<div class="errorMessages">
 		<ul>

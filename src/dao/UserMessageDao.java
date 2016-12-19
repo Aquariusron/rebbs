@@ -103,6 +103,8 @@ public class UserMessageDao {
 			if(!StringUtils.isEmpty(category)){
 				sql.append("and category = ?");
 			}
+			sql.append("ORDER BY insert_dt DESC limit " + num);
+
 			ps = connection.prepareStatement(sql.toString());
 
 			ps.setString(1, old);

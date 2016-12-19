@@ -22,10 +22,10 @@ public class UserServlet extends HttpServlet{
 			HttpServletResponse response) throws IOException, ServletException {
 
 		List<User> users = new UserService().getUsers();
+		User user = (User)request.getSession().getAttribute("loginUser");
 
 		request.setAttribute("users", users);
-//		request.getParameter("edit", edit);
-//		request.setAttribute("users", users);
+
 		request.getRequestDispatcher("/users.jsp").forward(request, response);
 	}
 

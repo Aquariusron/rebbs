@@ -39,9 +39,7 @@ public class TopServlet extends HttpServlet{
 		//UserList型からカテゴリーやメッセージ、ほかの情報からinsertDtだけをStringで抜く
 		if(StringUtils.isEmpty(currentDate)){
 			String insertDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-//			String insertDate = new SimpleDateFormat("yyyy-MM-dd 24:00:00").format(new Date());
 			currentDate = insertDate;
-					System.out.println(currentDate);
 		}
 		if(StringUtils.isEmpty(oldDate)){
 			String insertDate = new MessageService().getOld().getDate().toString();
@@ -51,6 +49,8 @@ public class TopServlet extends HttpServlet{
 
 		List<UserMessage> messages = new MessageService().getMessage(category,currentDate,oldDate);
 		request.setAttribute("selectedCategory", category);
+		request.setAttribute("selectedOldDate", oldDate);
+		request.setAttribute("selectedCurrentDate", currentDate);
 
 		List<UserMessage> categories = new MessageService().getCategory();
 		request.setAttribute("categories", categories);

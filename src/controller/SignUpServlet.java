@@ -44,13 +44,16 @@ public class SignUpServlet extends HttpServlet {
 			List<Position> positions = new PositionService().getPositions();
 			request.setAttribute("positions", positions);
 
+			int userId = Integer.parseInt(request.getParameter("id"));
+			User editUser = new UserService().getUser(userId);
+
 			request.getRequestDispatcher("/signup.jsp").forward(request, response);
 		}//top.jspへrequestされた内容、responseする内容の処理を移す
 
 		@Override
 		protected void doPost(HttpServletRequest request,
 				HttpServletResponse response) throws IOException, ServletException {
-			List messages = new ArrayList<String>();
+			List<String> messages = new ArrayList<>();
 			//このmessagesにはエラー文を入れる？
 
 			HttpSession session = request.getSession();
@@ -61,10 +64,17 @@ public class SignUpServlet extends HttpServlet {
 			user.setLoginId(request.getParameter("loginId"));
 			user.setPassword(request.getParameter("password"));
 
-
-			user.setBranchId(Integer.parseInt(request.getParameter("branchId")));
-			user.setPostId(Integer.parseInt(request.getParameter("positionId")));
-
+			//ブラウザから検証で値を改変出来てしまうため、変更されてしまった場合0を挿入する
+			try {
+				user.setBranchId(Integer.parseInt(request.getParameter("branchId")));
+			} catch(NumberFormatException e) {
+				user.setBranchId(0);
+			}
+			try {
+				user.setPostId(Integer.parseInt(request.getParameter("positionId")));
+			} catch(NumberFormatException e) {
+				user.setPostId(0);
+			}
 
 			//セッションの開始
 			if(isValid(request, messages) == true){
@@ -97,19 +107,24 @@ public class SignUpServlet extends HttpServlet {
 				List<String> messages) {
 			//3つの条件分岐を内包したisValidメソッド
 			String loginId = request.getParameter("loginId");
-			//リクエストパラメータの取得
-			//accountにユーザーが最初に入力した値を送り込む
+			String name = request.getParameter("name");
 			String password = request.getParameter("password");
 			//passwordにユーザーが最初に入力した値を送り込む
 
 			String passwordConfirm = request.getParameter("password_confirm");
 
-			User user = new User();
-			String rsLoginId = new UserService().setLoginId(loginId).toString();
+			System.out.println(new UserService().setLoginId(loginId));
+			User rsLoginId = new UserService().setLoginId(loginId);
 
-			System.out.println(rsLoginId);
+
 			//すでに使われているIDを重複しないようにする
-			if(StringUtils.isEmpty(loginId) == true) {
+			if(StringUtils.isBlank(name)){
+				messages.add("名前を入力してください");
+			}
+			if(name.length() > 10){
+				messages.add("10文字以下で入力してください：名前");
+			}
+			if(StringUtils.isBlank(loginId) == true) {
 				messages.add("ログインIDを入力してください");
 				//入力フォームに何も打ち込まれていなかったら
 			}
@@ -129,9 +144,6 @@ public class SignUpServlet extends HttpServlet {
 			}
 			if(6 > password.length() || password.length() > 255) {
 				messages.add("6文字以上255文字以内で入力してください：パスワード");
-			}
-			if(6 > loginId.length() || loginId.length() > 20) {
-				messages.add("6文字以上20文字以内で入力してください：ログインID");
 			}
 			if(messages.size() == 0){
 			//入力抜けがなければ処理を抜ける

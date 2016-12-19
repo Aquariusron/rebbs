@@ -40,7 +40,7 @@ public class SettingsServlet extends HttpServlet {
 		List<Position> positions = new PositionService().getPositions();
 		session.setAttribute("positions", positions);
 
-
+		//ifで数値かを判定
 		int hoge = Integer.parseInt(request.getParameter("id"));
 		User editUser  = new UserService().getUser(hoge);
 		session.setAttribute("editUser", editUser);
@@ -51,7 +51,7 @@ public class SettingsServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		List<String> messages = new ArrayList<String>();
+		List<String> messages = new ArrayList<>();
 
 		HttpSession session = request.getSession();
 
@@ -60,7 +60,6 @@ public class SettingsServlet extends HttpServlet {
 
 
 		if (isValid(request, messages) == true) {
-
 			try {
 				new UserService().update(editUser);
 			} catch (NoRowsUpdatedRuntimeException e) {
@@ -72,7 +71,9 @@ public class SettingsServlet extends HttpServlet {
 			response.sendRedirect("users");
 		} else {
 			session.setAttribute("errorMessages", messages);
-			response.sendRedirect("settings.jsp");
+//			response.sendRedirect("settings");
+			request.getRequestDispatcher("/settings.jsp").forward(request , response);
+			//値をsettingsに投げる
 		}
 	}
 
@@ -86,10 +87,16 @@ public class SettingsServlet extends HttpServlet {
 
 		editUser.setName(request.getParameter("name"));
 		editUser.setLoginId(request.getParameter("account"));
-		editUser.setBranchId(Integer.parseInt(request.getParameter("branchId")));
-		editUser.setPostId(Integer.parseInt(request.getParameter("positionId")));
-		editUser.setPassword(request.getParameter("password"));
-
+		try {
+			editUser.setBranchId(Integer.parseInt(request.getParameter("branchId")));
+		} catch(NumberFormatException e) {
+			editUser.setBranchId(0);
+		}
+		try {
+			editUser.setPassword(request.getParameter("password"));
+		} catch(NumberFormatException e) {
+			editUser.setPostId(0);
+		}
 
 		return editUser;
 	}
@@ -97,19 +104,34 @@ public class SettingsServlet extends HttpServlet {
 
 	private boolean isValid(HttpServletRequest request, List<String> messages) {
 
+		String id = request.getParameter("id");
+		int userId = Integer.parseInt(id);
 		String name = request.getParameter("name");
-		String account = request.getParameter("account");
+		String loginId = request.getParameter("account");
 		String password = request.getParameter("password");
 		String passwordConfirm = request.getParameter("password_confirm");
 
-		if(StringUtils.isEmpty(name)){
+		//userIdを比較する
+		User loginUser = new UserService().setLoginId(loginId);
+		System.out.println(loginUser);
+
+		if(StringUtils.isBlank(name)){
 			messages.add("名前を入力してください");
 		}
-		if (StringUtils.isEmpty(account) == true) {
+		if (10 < name.length()) {
+			messages.add("10文字以内で入力してください:名前");
+		}
+		if (StringUtils.isBlank(loginId) == true) {
 			messages.add("ログインIDを入力してください");
 		}
-		if(!StringUtils.isEmpty(password) || !StringUtils.isEmpty(passwordConfirm)){
-			if (StringUtils.isEmpty(password) == true) {
+		if (6 > loginId.length() || loginId.length() > 20) {
+			messages.add("6文字以上20文字以内で入力してください：ログインID");
+		}
+		if(loginUser != null && loginUser.getId() != userId){
+			messages.add("このログインIDは使用済みです");
+		}
+		if(!StringUtils.isBlank(password) || !StringUtils.isBlank(passwordConfirm)){
+			if (StringUtils.isBlank(password) == true) {
 				messages.add("パスワードを入力してください");
 			}
 			if (!(password.equals(passwordConfirm))) {
@@ -119,13 +141,6 @@ public class SettingsServlet extends HttpServlet {
 				messages.add("6文字以上255文字以下で入力してください：パスワード");
 			}
 		}
-		if (10 < name.length()) {
-			messages.add("10文字以内で入力してください:名前");
-		}
-		if (6 > account.length() || account.length() > 20) {
-			messages.add("6文字以上20文字以内で入力してください：ログインID");
-		}
-		// アカウントが既に利用されていないか、メールアドレスが既に登録されていないかなどの確認も必要
 		if (messages.size() == 0) {
 			return true;
 		} else {

@@ -7,10 +7,14 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>ユーザー登録</title>
-	<link href="./css/style.css" rel="stylesheet" type="text/css">
+	<link href="bbs.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <div class="main-contents">
+<a href="users">戻る</a>
+<br />
+<br />
+<div class="title"><h2><c:out value="ユーザー登録"/></h2></div>
 <c:if test="${ not empty errorMessages }">
 	<div class="errorMessages">
 		<ul>
@@ -21,14 +25,14 @@
 	</div>
 	<c:remove var="errorMessages" scope="session"/>
 </c:if>
+<form action="signup" method="post">
+	<input type="hidden" name="id" value="${editUser.id}" />
 
-<form action="signup" method="post"><br />
-	<label for="name">名前(10文字以下)</label>
-	<br /><input name="name" id="name" value="${editUser.name}" style="margin-left:70px;"/><br />
+	<label for="name">名前(10文字以下)</label>//valueいじる
+	<br /><input name="name" id="name" value="${}" style="margin-left:70px;"/><br />
 	<br />
-	<label for="loginId">ログインID名(6文字以上20文字以下)</label>
-	<br /><input name="loginId" id="loginId"
-	value="${editUser.loginId}" style="margin-left:70px;"/><br />
+	<label for="loginId">ログインID名(6文字以上20文字以下)</label>//valueいじる
+	<br /><input name="loginId" id="loginId" value="${}" style="margin-left:70px;"/><br />
 	<br />
 	<label for="password">パスワード(6文字以上255文字以下)</label><br />
 	<input name="password" type="password" id="password" style="margin-left:70px;"/><br />
@@ -51,17 +55,16 @@
 	役職：<select name="positionId">
 			<c:forEach items="${positions}" var="position">
 				<c:if test="${ position.id == editUser.postId }">
-					<option value="${position.id}"><c:out value="${position.name}"></c:out></option>
+					<option value="${position.id}" selected><c:out value="${position.name}"></c:out></option>
 				</c:if>
 				<c:if test="${ position.id != editUser.postId }">
 					<option value="${position.id}"><c:out value="${position.name}"></c:out></option>
 				</c:if>
 			</c:forEach>
-			</select>
-	<input type="submit" value="登録" /><br />
+		</select>
+	<input type="submit" value="登録" style="margin-left:20px;"/><br />
 </form>
 <br />
-<a href="./">戻る</a>
 <br />
 <div class="copyright">Copyright(c)Akane Yamashita</div>
 </div>

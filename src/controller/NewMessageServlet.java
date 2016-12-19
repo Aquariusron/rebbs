@@ -63,25 +63,25 @@ public class NewMessageServlet extends HttpServlet {
 		String message = request.getParameter("text");
 		String category = request.getParameter("category");
 		String subject = request.getParameter("subject");
-		if (StringUtils.isBlank(message) == true) {
-			messages.add("本文を入力してください");
-		}
-		if (StringUtils.isBlank(category) == true) {
-			messages.add("カテゴリーを入力してください");
-		}
 		if (StringUtils.isBlank(subject) == true) {
 			messages.add("件名を入力してください");
 		}
+
+		if (StringUtils.isBlank(category) == true) {
+			messages.add("カテゴリーを入力してください");
+		}
+		if (StringUtils.isBlank(message) == true) {
+			messages.add("本文を入力してください");
+		}
+		if (subject.length() > 50) {
+			messages.add("50文字以下で入力してください：件名");
+		}
+		if (category.length() > 10) {
+			messages.add("10文字以下で入力してください：カテゴリー");
+		}
 		if (1000 < message.length()) {
-			messages.add("1000文字以下で入力してください");
+			messages.add("1000文字以下で入力してください：本文");
 		}
-		if (category.length() < 10) {
-			messages.add("10文字以下で入力してください");
-		}
-		if (subject.length() < 50) {
-			messages.add("50文字以下で入力してください");
-		}
-		System.out.println(message);
 		if (messages.size() == 0) {
 			return true;
 		} else {

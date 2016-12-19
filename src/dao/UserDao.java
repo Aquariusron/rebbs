@@ -17,6 +17,7 @@ import exception.NoRowsUpdatedRuntimeException;
 import exception.SQLRuntimeException;
 
 public class UserDao {
+
 	public User rsLoginId(Connection connection, String loginId) {
 
 		PreparedStatement ps = null;
