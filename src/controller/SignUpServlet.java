@@ -44,11 +44,8 @@ public class SignUpServlet extends HttpServlet {
 			List<Position> positions = new PositionService().getPositions();
 			request.setAttribute("positions", positions);
 
-			int userId = Integer.parseInt(request.getParameter("id"));
-			User editUser = new UserService().getUser(userId);
-
 			request.getRequestDispatcher("/signup.jsp").forward(request, response);
-		}//top.jspへrequestされた内容、responseする内容の処理を移す
+		}
 
 		@Override
 		protected void doPost(HttpServletRequest request,
@@ -63,6 +60,12 @@ public class SignUpServlet extends HttpServlet {
 			user.setName(request.getParameter("name"));
 			user.setLoginId(request.getParameter("loginId"));
 			user.setPassword(request.getParameter("password"));
+
+			//値の保持
+			String name = request.getParameter("name");
+			String loginId = request.getParameter("loginId");
+			request.setAttribute("fillName", name);
+			request.setAttribute("fillLoginId", loginId);
 
 			//ブラウザから検証で値を改変出来てしまうため、変更されてしまった場合0を挿入する
 			try {
@@ -98,8 +101,7 @@ public class SignUpServlet extends HttpServlet {
 				//getParameter内の値が使えるように、else内にUserクラスに取ってきた値をセットするプログラムを書く。
 				//今やりたいのはjspに表示させるようにどんな記述をするか。
 				request.getRequestDispatcher("/signup.jsp").forward(request, response);
-				//response.sendRedirect("signup");
-				//signupページに遷移するようレスポンスする
+
 			}
 		}
 
@@ -112,10 +114,7 @@ public class SignUpServlet extends HttpServlet {
 			//passwordにユーザーが最初に入力した値を送り込む
 
 			String passwordConfirm = request.getParameter("password_confirm");
-
-			System.out.println(new UserService().setLoginId(loginId));
 			User rsLoginId = new UserService().setLoginId(loginId);
-
 
 			//すでに使われているIDを重複しないようにする
 			if(StringUtils.isBlank(name)){
@@ -133,7 +132,7 @@ public class SignUpServlet extends HttpServlet {
 				messages.add("このログインIDは使用済みです");
 				//すでに使われているIDを重複しないようにする
 			}
-			if(6 > loginId.length() || loginId.length() < 20){
+			if(loginId.length() < 6 || loginId.length() > 20){
 				messages.add("6文字以上20文字以内で入力してください：ログインID");
 			}
 			if(StringUtils.isEmpty(password) == true) {

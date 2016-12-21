@@ -11,9 +11,11 @@
 </head>
 <body>
 <div class="main-contents">
+<br />
 <div class="title">
 	<div class="title"><h2>掲示板　ログイン画面</h2></div>
 </div>
+<div class="errorMessages">
 <c:if test="${ not empty errorMessages }">
 	<div class="errorMessages">
 		<ul>
@@ -24,7 +26,7 @@
 	</div>
 	<c:remove var="errorMessages" scope="session"/>
 </c:if>
-
+</div>
 <form action="login" method="post"><br />
 	<label for="loginId">ログインID</label>
 	<input name="loginId" id="loginId"/> <br />

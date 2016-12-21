@@ -66,8 +66,8 @@ public class UserService {
 		Connection connection = null;
 		try {
 			connection = getConnection();
-
 			//空だったら以下の処理をしないif..入ってたら以下の処理をする
+
 			if(!(StringUtils.isEmpty(user.getPassword()) == true)){
 				String encPassword = CipherUtil.encrypt(user.getPassword());
 				user.setPassword(encPassword);

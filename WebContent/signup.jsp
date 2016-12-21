@@ -28,11 +28,11 @@
 <form action="signup" method="post">
 	<input type="hidden" name="id" value="${editUser.id}" />
 
-	<label for="name">名前(10文字以下)</label>//valueいじる
-	<br /><input name="name" id="name" value="${}" style="margin-left:70px;"/><br />
+	<label for="name">名前(10文字以下)</label><%--valueいじる--%>
+	<br /><input name="name" id="name" value="${ fillName }" style="margin-left:70px;"/><br />
 	<br />
-	<label for="loginId">ログインID名(6文字以上20文字以下)</label>//valueいじる
-	<br /><input name="loginId" id="loginId" value="${}" style="margin-left:70px;"/><br />
+	<label for="loginId">ログインID名(6文字以上20文字以下)</label><%--valueいじる--%>
+	<br /><input name="loginId" id="loginId" value="${ fillLoginId }" style="margin-left:70px;"/><br />
 	<br />
 	<label for="password">パスワード(6文字以上255文字以下)</label><br />
 	<input name="password" type="password" id="password" style="margin-left:70px;"/><br />

@@ -40,11 +40,29 @@ public class SettingsServlet extends HttpServlet {
 		List<Position> positions = new PositionService().getPositions();
 		session.setAttribute("positions", positions);
 
-		//ifで数値かを判定
-		int hoge = Integer.parseInt(request.getParameter("id"));
-		User editUser  = new UserService().getUser(hoge);
-		session.setAttribute("editUser", editUser);
-		request.getRequestDispatcher("settings.jsp").forward(request, response);
+		//idに数字以外が入ったときの バリデーション
+		//ユーザー一覧に戻し方がわからない
+
+
+		try {
+			int id = Integer.parseInt(request.getParameter("id"));
+			User editUser = new UserService().getUser(id);
+			if(editUser != null) {
+				session.setAttribute("editUser", editUser);
+				request.getRequestDispatcher("settings.jsp").forward(request, response);
+			} else {
+				List<String> messages = new ArrayList<>();
+				messages.add("不正なIDが取得されました");
+				session.setAttribute("errorMessage", messages);
+				response.sendRedirect("users");
+			}
+		} catch(NumberFormatException e) {
+			List<String> messages = new ArrayList<>();
+			messages.add("不正なIDが取得されました");
+			session.setAttribute("errorMessage", messages);
+			response.sendRedirect("users");
+		}
+
 	}
 
 	@Override
@@ -58,10 +76,16 @@ public class SettingsServlet extends HttpServlet {
 		User editUser = getEditUser(request);
 		session.setAttribute("editUser", editUser);
 
-
 		if (isValid(request, messages) == true) {
 			try {
 				new UserService().update(editUser);
+
+				User loginUser = (User) session.getAttribute("loginUser");
+				if(editUser.getId() == loginUser.getId()){
+					User updatedLoginUser = new UserService().getUser(loginUser.getId());
+					session.setAttribute("loginUser", updatedLoginUser);//12/21付けたし　ログインユーザーの更新
+				}
+
 			} catch (NoRowsUpdatedRuntimeException e) {
 				session.removeAttribute("editUser");
 				messages.add("他の人によって更新されています。最新のデータを表示しました。データを確認してください。");
@@ -71,7 +95,6 @@ public class SettingsServlet extends HttpServlet {
 			response.sendRedirect("users");
 		} else {
 			session.setAttribute("errorMessages", messages);
-//			response.sendRedirect("settings");
 			request.getRequestDispatcher("/settings.jsp").forward(request , response);
 			//値をsettingsに投げる
 		}
@@ -87,13 +110,16 @@ public class SettingsServlet extends HttpServlet {
 
 		editUser.setName(request.getParameter("name"));
 		editUser.setLoginId(request.getParameter("account"));
+		editUser.setPassword(password);
 		try {
 			editUser.setBranchId(Integer.parseInt(request.getParameter("branchId")));
 		} catch(NumberFormatException e) {
 			editUser.setBranchId(0);
+
 		}
+
 		try {
-			editUser.setPassword(request.getParameter("password"));
+			editUser.setPostId(Integer.parseInt(request.getParameter("positionId")));
 		} catch(NumberFormatException e) {
 			editUser.setPostId(0);
 		}
@@ -110,10 +136,11 @@ public class SettingsServlet extends HttpServlet {
 		String loginId = request.getParameter("account");
 		String password = request.getParameter("password");
 		String passwordConfirm = request.getParameter("password_confirm");
+		String branchId = request.getParameter("branchId");
+		String postId = request.getParameter("positionId");
 
 		//userIdを比較する
 		User loginUser = new UserService().setLoginId(loginId);
-		System.out.println(loginUser);
 
 		if(StringUtils.isBlank(name)){
 			messages.add("名前を入力してください");
@@ -141,9 +168,24 @@ public class SettingsServlet extends HttpServlet {
 				messages.add("6文字以上255文字以下で入力してください：パスワード");
 			}
 		}
+		if(isNumber(branchId) == false) {
+			messages.add("数字を入力しないでください");
+		}
+		if(isNumber(postId) == false){
+			messages.add("数字を入力しないでください");
+		}
 		if (messages.size() == 0) {
 			return true;
 		} else {
+			return false;
+		}
+	}
+
+	public boolean isNumber(String num) {
+		try {
+			Integer.parseInt(num);
+			return true;
+		} catch(NumberFormatException e) {
 			return false;
 		}
 	}

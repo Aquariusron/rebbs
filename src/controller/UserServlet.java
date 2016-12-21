@@ -8,8 +8,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import beans.Branch;
+import beans.Position;
 import beans.User;
+import service.BranchService;
+import service.PositionService;
 import service.UserService;
 @WebServlet(urlPatterns = { "/users" })
 //indexから始まるパラメータを指定
@@ -25,6 +30,14 @@ public class UserServlet extends HttpServlet{
 		User user = (User)request.getSession().getAttribute("loginUser");
 
 		request.setAttribute("users", users);
+
+		HttpSession session = request.getSession();
+
+		List<Branch> branches = new BranchService().getBranches();
+		session.setAttribute("branches", branches);
+
+		List<Position> positions = new PositionService().getPositions();
+		session.setAttribute("positions", positions);
 
 		request.getRequestDispatcher("/users.jsp").forward(request, response);
 	}

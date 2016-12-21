@@ -33,8 +33,6 @@ public class TopServlet extends HttpServlet{
 		String oldDate = request.getParameter("old");
 		String currentDate = request.getParameter("current");
 
-
-
 		// DBから１番古い日付を取得　servlet → service → dao
 		//UserList型からカテゴリーやメッセージ、ほかの情報からinsertDtだけをStringで抜く
 		if(StringUtils.isEmpty(currentDate)){

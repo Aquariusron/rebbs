@@ -140,7 +140,6 @@ public class UserDao {
 			ps.setString(3, user.getName());
 			ps.setInt(4, user.getBranchId());
 			ps.setInt(5, user.getPostId());
-			System.out.println(ps);
 
 			ps.executeUpdate();
 		} catch (SQLException e) {
@@ -167,8 +166,7 @@ public class UserDao {
 			}
 			sql.append(" WHERE");
 			sql.append(" id = ?");
-			sql.append(" AND");
-			sql.append(" update_at = ?");
+
 
 			ps = connection.prepareStatement(sql.toString());
 
@@ -176,15 +174,12 @@ public class UserDao {
 			ps.setString(2, user.getName());
 			ps.setInt(3, user.getBranchId());
 			ps.setInt(4, user.getPostId());
+
 			if(!StringUtils.isEmpty(user.getPassword()) == true){
 				ps.setString(5, user.getPassword());
 				ps.setInt(6, user.getId());
-				ps.setTimestamp(7,
-						new Timestamp(user.getUpdateAt().getTime()));
 			} else {
 				ps.setInt(5, user.getId());
-				ps.setTimestamp(6,
-						new Timestamp(user.getUpdateAt().getTime()));
 			}
 			int count = ps.executeUpdate();
 			if (count == 0) {

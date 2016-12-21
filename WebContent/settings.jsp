@@ -15,6 +15,8 @@
 <br />
 <br />
 <div class="title"><h2>ユーザー編集</h2></div>
+<br />
+
 <c:if test="${ not empty errorMessages }">
 	<div class="errorMessages">
 		<ul>
@@ -29,6 +31,8 @@
 <br />
 <form action="settings" method="post" enctype="multipart/form-data"><br />
 	<input type="hidden" value="${editUser.id}" name="id" />
+	<input type="hidden" value="${ editUser.branchId }" name="branchId" />
+ 	<input type="hidden" value="${ editUser.postId }" name="positionId" />
 
 	<label for="name">名前(10文字以下)</label>
 	<br />
@@ -41,34 +45,39 @@
 	<br />
 	<label for="password">パスワード(6文字以上255文字以下)</label>
 	<br />
-	<input name="password" id="password" style="margin-left:70px;"/>
+	<input name="password" id="password" type="password" style="margin-left:70px;"/>
 	<br />
 	<br />
 	<label for="password">パスワードの確認</label>
 	<br />
-	<input name="password_confirm" id="password" style="margin-left:70px;"/> <br />
+	<input name="password_confirm" id="password" type="password" style="margin-left:70px;"/> <br />
 	<br />
-	支店：<select name="branchId">
-		<c:forEach items="${branches}" var="branch">
-			<c:if test="${ branch.id == editUser.branchId }">
-				<option value="${branch.id}" selected><c:out value="${branch.name}"></c:out></option>
-			</c:if>
-			<c:if test="${ branch.id != editUser.branchId }">
-				<option value="${branch.id}" ><c:out value="${branch.name}"></c:out></option>
-			</c:if>
-		</c:forEach>
-	</select>
-	役職：<select name="positionId">
-		<c:forEach items="${positions}" var="position">
-			<c:if test="${ position.id == editUser.postId }">
-				<option value="${position.id}"selected><c:out value="${position.name}"></c:out></option>
-			</c:if>
-			<c:if test="${ position.id != editUser.postId }">
-				<option value="${position.id}"><c:out value="${position.name}"></c:out></option>
-			</c:if>
-		</c:forEach>
-	</select>
-	<input type="submit" value="変更" style="margin-left:20px;"/>
+	<c:if test="${ editUser.id != loginUser.id }">
+	支店：
+		<select name="branchId">
+			<c:forEach items="${branches}" var="branch">
+				<c:if test="${ branch.id == editUser.branchId }">
+					<option value="${branch.id}" selected><c:out value="${branch.name}"></c:out></option>
+				</c:if>
+				<c:if test="${ branch.id != editUser.branchId }">
+					<option value="${branch.id}" ><c:out value="${branch.name}"></c:out></option>
+				</c:if>
+			</c:forEach>
+		</select>
+	役職：
+		<select name="positionId">
+			<c:forEach items="${positions}" var="position">
+				<c:if test="${ position.id == editUser.postId }">
+					<option value="${position.id}"selected><c:out value="${position.name}"></c:out></option>
+				</c:if>
+				<c:if test="${ position.id != editUser.postId }">
+					<option value="${position.id}"><c:out value="${position.name}"></c:out></option>
+				</c:if>
+			</c:forEach>
+		</select>
+	</c:if>
+
+	<input type="submit" value="変更" style="margin-left:20px;" />
 	<br />
 	<br />
 </form>
