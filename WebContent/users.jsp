@@ -17,9 +17,9 @@
 	<a href="signup">新規登録</a>
 <br />
 <br />
-<div class="title">
-	<div class="title"><h2><c:out value="ユーザー管理画面" /></h2></div>
-</div>
+<br />
+<br />
+<div class="title">ユーザー管理画面</div>
 <br />
 <c:if test="${ not empty errorMessage }">
 	<div class="errorMessages">
@@ -35,8 +35,7 @@
 <br />
 <div class="users">
 <%--userをfor文で回してIDと名前を一覧表示したい --%>
-<center>
-	<TABLE cellpadding="15">
+<TABLE>
 <tr>
 <th>名前</th>
 <th>ログインID</th>
@@ -71,12 +70,12 @@
 				<form action="stopuser" method="post">
 				<input type="hidden" name="userid" value="${user.id}">
 				<c:if test="${ user.stop  == true }">
-					<button name="stop" type="submit" value="false" onclick="alert('アカウントを停止しますか？')"  style="margin-left:25px;">停止</button>
+					<button name="stop" type="submit" value="false" onclick="alert('アカウントを停止しますか？')">停止</button>
 					<input type ="hidden" name="id" value="${user.id}">
 					<input type ="hidden" name="stop" value="${user.stop}">
 				</c:if>
 				<c:if test="${ user.stop  == false }">
-					<button name="stop" type="submit"  value="true" onclick="alert('アカウントを復活させますか？')" style="margin-left:25px;">復活</button>
+					<button name="stop" type="submit"  value="true" onclick="alert('アカウントを復活させますか？')" style="margin-left:15px;">復活</button>
 					<input type ="hidden" name="id" value="${user.id}">
 					<input type ="hidden" name="stop" value="${user.stop}">
 				</c:if>
@@ -86,14 +85,13 @@
 
 			<TD>
 				<a href="settings?id=${user.id}" >
-				<button name="stop" type="submit" style="margin-left:25px;">
+				<button name="stop" type="submit" style="margin-left:5px;">
 				編集</button></a>
 			</TD>
 			</TR>
 			</c:forEach>
 	</TABLE>
 	<br />
-</center>
 </div>
 <br />
 <br />

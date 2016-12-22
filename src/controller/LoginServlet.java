@@ -34,8 +34,6 @@ public class LoginServlet extends HttpServlet {
 		LoginService loginService = new LoginService();
 		User user = loginService.login(loginId, password);
 
-
-
 		HttpSession session = request.getSession();
 
 		if (user != null && user.getStop()) {

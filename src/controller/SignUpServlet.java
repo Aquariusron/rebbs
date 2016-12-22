@@ -37,7 +37,6 @@ public class SignUpServlet extends HttpServlet {
 		protected void doGet(HttpServletRequest request,
 				HttpServletResponse response) throws IOException,ServletException {
 
-
 			List<Branch> branches = new BranchService().getBranches();
 			request.setAttribute("branches", branches);
 
@@ -111,6 +110,8 @@ public class SignUpServlet extends HttpServlet {
 			String loginId = request.getParameter("loginId");
 			String name = request.getParameter("name");
 			String password = request.getParameter("password");
+			String branchId = request.getParameter("branchId");
+			String postId = request.getParameter("positionId");
 			//passwordにユーザーが最初に入力した値を送り込む
 
 			String passwordConfirm = request.getParameter("password_confirm");
@@ -144,12 +145,23 @@ public class SignUpServlet extends HttpServlet {
 			if(6 > password.length() || password.length() > 255) {
 				messages.add("6文字以上255文字以内で入力してください：パスワード");
 			}
-			if(messages.size() == 0){
-			//入力抜けがなければ処理を抜ける
+			if(isNumber(branchId) == false) {
+				messages.add("数字を入力しないでください");
+			}
+			if(isNumber(postId) == false){
+				messages.add("数字を入力しないでください");
+			}
+
+			return messages.size() == 0;
+
+		}
+
+		public boolean isNumber(String num) {
+			try {
+				Integer.parseInt(num);
 				return true;
-			} else {
+			} catch(NumberFormatException e) {
 				return false;
-			//入力抜けがあったらfalseを返す
 			}
 		}
 	}

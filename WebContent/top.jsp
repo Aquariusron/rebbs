@@ -12,20 +12,22 @@
 	<link href="bbs.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-<div class = "main-contents">
-	<a href="newMessage">新規投稿</a>
-	<a href="users">ユーザー管理</a>
-	<a href="logout">ログアウト</a>
-<br />
-<br />
-<br />
-<br />
-<div class="title">
-	<div class="title"><h2><c:out value="掲示板" /></h2></div>
-</div>
-<br />
-<form method="get">
-□カテゴリー:
+	<div class = "main-contents">
+		<a href="newMessage">新規投稿</a>
+			<c:out value=" " />
+		<a href="users">ユーザー管理</a>
+			<c:out value=" " />
+		<a href="logout">ログアウト</a>
+	</div>
+	<br />
+	<br />
+	<br />
+	<br />
+	<div class="title">掲示板</div>
+	<br />
+	<br />
+	<form method="get">
+	□カテゴリー:
 	<select name="category">
 		<option value=""><c:out value=""></c:out></option><%--空のセレクトタブ --%>
 		<c:forEach items="${ categories }" var="category">
@@ -39,61 +41,62 @@
 	</select>
 	<br />
 	<br />
-	□日時:
+	□日時　　　:
+	<input type="date" name="old"  value="${ selectedOldDate }">
+	<input type="date" name="current" value="${ selectedCurrentDate }">
+	<input type="submit" value="絞り込む" >
+	</form>
+	<br/>
+	<a href="./"><button name="reset" style="margin-left:20px;">絞込みリセット</button></a>
+	<c:if test="${ not empty errorMessages }">
+		<div class="errorMessages">
+			<ul>
+				<c:forEach items="${ errorMessages }" var="comment">
+					<li><c:out value="${ comment }" />
+				</c:forEach>
+			</ul>
+		</div>
+	<c:remove var="errorMessages" scope="session"/>
+	</c:if>
+
 	<br />
-		<input type="date" name="old" style="margin-left:85px;" value="${ selectedOldDate }">
-		<input type="date" name="current" value="${ selectedCurrentDate }">
-		<input type="submit" value="絞り込む">
-</form>
-<br/>
-<a href="./"><button name="reset" style="margin-left:5px;">絞込みリセット</button></a>
-<br />
-<c:if test="${ not empty errorMessages }">
-	<div class="errorMessages">
-		<ul>
-			<c:forEach items="${ errorMessages }" var="comment">
-				<li><c:out value="${ comment }" />
-			</c:forEach>
-		</ul>
-	</div>
-<c:remove var="errorMessages" scope="session"/>
-</c:if>
-<br />
-<div class="messages">
+	<br />
+	<br />
 	<c:forEach items="${ messages }" var="message">
+	<table align="center"><TD>
 		<br />
 		<div class="message">
-			<TABLE><TR><TH><TD>
-				<div class="subject"><c:out value="■${ message.subject }" /></div><br />
-				<div class="category"><c:out value="□${ message.category }" /></div><br />
-				<div class="text">
-					<c:forEach var="s" items="${ fn:split(message.text, '
-	') }">
-					    <div><c:out value="${ s }"></c:out></div>
-					</c:forEach>
-				</div>
-				<br />
-				<div class="date"><fmt:formatDate value="${ message.getDate() }" pattern="yyyy/MM/dd HH:mm:ss" />
-				<c:out value="${ message.name }" /></div>
-			</TH></TD></TR></TABLE>
+			<div class="subject"><c:out value="【${ message.subject }】" /></div>
+			<br />
+			<HR>
+			<div class="category"><c:out value="カテゴリー【${ message.category }】" /></div>
+			<HR>
+			<br />
+			<div class="text">
+				<c:forEach var="s" items="${ fn:split(message.text, '
+				') }">
+					<c:out value="${ s }"></c:out><br />
+				</c:forEach>
+			</div>
+			<br />
+			<div class="date"><fmt:formatDate value="${ message.getDate() }" pattern="yyyy/MM/dd HH:mm:ss" /></div>
+			<div class="name"><c:out value="${ message.name }" /></div>
 		</div>
+		<HR>
 		<br />
 		<div class="comment">
 			<c:forEach items="${ comments }" var="comment">
 				<c:if test="${ comment.messageId == message.id }">
-				<TABLE><TR><TD>
 					<div class="text">
-
+					<%--splitで配列が出来、<br />で改行をforeachでまわしている--%>
 						<c:forEach var="s" items="${ fn:split(comment.getComment(), '
 	')}">
-						    <div><c:out value="${ s }" /></div>
+						    <c:out value="${ s }" /><br />
 						</c:forEach>
 					</div>
-					<br />
 					<div class="date"><fmt:formatDate value="${ comment.getInsertDate() }" pattern="yyyy/MM/dd HH:mm:ss" />
 					<c:out value="${ comment.name }" />
 					</div>
-				</TD></TR></TABLE>
 				</c:if>
 			</c:forEach>
 		</div>
@@ -111,18 +114,19 @@
 		</div>
 		<br />
 		<br />
+	</TD></TABLE>
+	<br />
 	</c:forEach>
 	<br />
 	<br />
 	<br />
 	<br />
-</div>
-<br />
-<br />
-<br />
-<br />
-<br />
-<div class = "copyright">Copyright(c)Akane Yamashita</div>
-</div>
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<div class = "copyright">Copyright(c)Akane Yamashita</div>
+
 </body>
 </html>

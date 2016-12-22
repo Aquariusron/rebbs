@@ -12,8 +12,7 @@
 <body>
 <div class="main-contents">
 <br />
-<div class="title">
-	<div class="title"><h2>掲示板　ログイン画面</h2></div>
+<div class="title">掲示板　ログイン画面</div>
 </div>
 <div class="errorMessages">
 <c:if test="${ not empty errorMessages }">

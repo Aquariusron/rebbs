@@ -32,7 +32,6 @@ public class SettingsServlet extends HttpServlet {
 		HttpServletResponse response) throws ServletException, IOException {
 
 		HttpSession session = request.getSession();
-		User loginUser = (User) session.getAttribute("loginUser");
 
 		List<Branch> branches = new BranchService().getBranches();
 		session.setAttribute("branches", branches);
@@ -47,9 +46,11 @@ public class SettingsServlet extends HttpServlet {
 		try {
 			int id = Integer.parseInt(request.getParameter("id"));
 			User editUser = new UserService().getUser(id);
+
 			if(editUser != null) {
 				session.setAttribute("editUser", editUser);
 				request.getRequestDispatcher("settings.jsp").forward(request, response);
+
 			} else {
 				List<String> messages = new ArrayList<>();
 				messages.add("不正なIDが取得されました");
@@ -76,28 +77,29 @@ public class SettingsServlet extends HttpServlet {
 		User editUser = getEditUser(request);
 		session.setAttribute("editUser", editUser);
 
-		if (isValid(request, messages) == true) {
-			try {
-				new UserService().update(editUser);
-
-				User loginUser = (User) session.getAttribute("loginUser");
-				if(editUser.getId() == loginUser.getId()){
-					User updatedLoginUser = new UserService().getUser(loginUser.getId());
-					session.setAttribute("loginUser", updatedLoginUser);//12/21付けたし　ログインユーザーの更新
-				}
-
-			} catch (NoRowsUpdatedRuntimeException e) {
-				session.removeAttribute("editUser");
-				messages.add("他の人によって更新されています。最新のデータを表示しました。データを確認してください。");
-				session.setAttribute("errorMessages", messages);
-			}
-			session.removeAttribute("editUser");
-			response.sendRedirect("users");
-		} else {
+		if (isValid(request, messages) == false) {
 			session.setAttribute("errorMessages", messages);
 			request.getRequestDispatcher("/settings.jsp").forward(request , response);
 			//値をsettingsに投げる
+			return;
 		}
+
+		try {
+			new UserService().update(editUser);
+
+			User loginUser = (User) session.getAttribute("loginUser");
+			if(editUser.getId() == loginUser.getId()){
+				User updatedLoginUser = new UserService().getUser(loginUser.getId());
+				session.setAttribute("loginUser", updatedLoginUser);//12/21付けたし　ログインユーザーの更新
+			}
+
+		} catch (NoRowsUpdatedRuntimeException e) {
+			session.removeAttribute("editUser");
+			messages.add("他の人によって更新されています。最新のデータを表示しました。データを確認してください。");
+			session.setAttribute("errorMessages", messages);
+		}
+		session.removeAttribute("editUser");
+		response.sendRedirect("users");
 	}
 
 	private User getEditUser(HttpServletRequest request)
@@ -111,18 +113,8 @@ public class SettingsServlet extends HttpServlet {
 		editUser.setName(request.getParameter("name"));
 		editUser.setLoginId(request.getParameter("account"));
 		editUser.setPassword(password);
-		try {
-			editUser.setBranchId(Integer.parseInt(request.getParameter("branchId")));
-		} catch(NumberFormatException e) {
-			editUser.setBranchId(0);
-
-		}
-
-		try {
-			editUser.setPostId(Integer.parseInt(request.getParameter("positionId")));
-		} catch(NumberFormatException e) {
-			editUser.setPostId(0);
-		}
+		editUser.setBranchId(Integer.parseInt(request.getParameter("branchId")));
+		editUser.setPostId(Integer.parseInt(request.getParameter("positionId")));
 
 		return editUser;
 	}
@@ -169,16 +161,13 @@ public class SettingsServlet extends HttpServlet {
 			}
 		}
 		if(isNumber(branchId) == false) {
-			messages.add("数字を入力しないでください");
+			messages.add("数字を入力してください");
 		}
 		if(isNumber(postId) == false){
-			messages.add("数字を入力しないでください");
+			messages.add("数字を入力してください");
 		}
-		if (messages.size() == 0) {
-			return true;
-		} else {
-			return false;
-		}
+
+		return messages.size() == 0;
 	}
 
 	public boolean isNumber(String num) {

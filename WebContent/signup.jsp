@@ -14,7 +14,11 @@
 <a href="users">戻る</a>
 <br />
 <br />
-<div class="title"><h2><c:out value="ユーザー登録"/></h2></div>
+<br />
+<br />
+<div class="title">ユーザー登録</div>
+<br />
+<br />
 <c:if test="${ not empty errorMessages }">
 	<div class="errorMessages">
 		<ul>
@@ -25,6 +29,7 @@
 	</div>
 	<c:remove var="errorMessages" scope="session"/>
 </c:if>
+<div class="center">
 <form action="signup" method="post">
 	<input type="hidden" name="id" value="${editUser.id}" />
 
@@ -64,6 +69,7 @@
 		</select>
 	<input type="submit" value="登録" style="margin-left:20px;"/><br />
 </form>
+</div>
 <br />
 <br />
 <div class="copyright">Copyright(c)Akane Yamashita</div>

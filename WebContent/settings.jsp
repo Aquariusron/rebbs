@@ -14,7 +14,7 @@
 <a href="users">戻る</a>
 <br />
 <br />
-<div class="title"><h2>ユーザー編集</h2></div>
+<div class="title">ユーザー編集</div>
 <br />
 
 <c:if test="${ not empty errorMessages }">
@@ -27,8 +27,8 @@
 	</div>
 	<c:remove var="errorMessages" scope="session"/>
 </c:if>
-
 <br />
+<div class="settingsmain">
 <form action="settings" method="post" enctype="multipart/form-data"><br />
 	<input type="hidden" value="${editUser.id}" name="id" />
 	<input type="hidden" value="${ editUser.branchId }" name="branchId" />
@@ -85,6 +85,6 @@
 <br />
 <div class="copyright">Copyright(c)Akane Yamashita</div>
 </div>
-
+</div>
 </body>
 </html>

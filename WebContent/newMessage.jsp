@@ -17,7 +17,9 @@
 <a href="./">戻る</a>
 <br />
 <br />
-<div class="title"><h2><c:out value="新規投稿"></c:out></h2></div>
+<br />
+<br />
+<div class="title">新規投稿</div>
 <c:if test="${ not empty errorMessages }">
 	<div class="errorMessages">
 		<ul>
@@ -29,6 +31,7 @@
 	<c:remove var="errorMessages" scope="session"/>
 </c:if>
 <br />
+<div class="newMessage">
 	<form action="newMessage" method="post">
 			■件名：(50文字まで)<br />
 			<input type="text" name="subject" height="80" width="1" class="tweet-box" value="${message.subject}"style="margin-left:20px;"><br /><br />
@@ -40,6 +43,7 @@
 			<input type="submit" value="新規投稿"style="margin-left:450px;">
 	</form>
 	<c:remove var="message" scope="session"/>
+</div>
 <br />
 <br />
 <br />
